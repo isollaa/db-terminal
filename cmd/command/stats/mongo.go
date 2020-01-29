@@ -2,7 +2,7 @@ package stats
 
 import (
 	"github.com/globalsign/mgo/bson"
-	m "github.com/isollaa/db-terminal/cmd/db/mongo"
+	m "github.com/isollaa/db-terminal/cmd/init/mongo"
 	t "github.com/isollaa/db-terminal/config"
 	"github.com/isollaa/db-terminal/registry"
 )

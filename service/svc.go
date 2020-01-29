@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/isollaa/conn/helper"
-	m "github.com/isollaa/db-terminal/cmd/db/mongo"
-	s "github.com/isollaa/db-terminal/cmd/db/sql"
+	m "github.com/isollaa/db-terminal/cmd/init/mongo"
+	s "github.com/isollaa/db-terminal/cmd/init/sql"
 	t "github.com/isollaa/db-terminal/config"
 	"github.com/isollaa/db-terminal/registry"
 	"golang.org/x/crypto/ssh/terminal"

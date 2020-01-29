@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	s "github.com/isollaa/db-terminal/cmd/db/sql"
+	s "github.com/isollaa/db-terminal/cmd/init/sql"
 	t "github.com/isollaa/db-terminal/config"
 	"github.com/isollaa/db-terminal/registry"
 )

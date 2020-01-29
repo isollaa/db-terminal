@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
-	s "github.com/isollaa/db-terminal/cmd/db/sql"
+	s "github.com/isollaa/db-terminal/cmd/init/sql"
 	"github.com/isollaa/db-terminal/registry"
 )
 
