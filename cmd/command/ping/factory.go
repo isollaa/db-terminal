@@ -12,7 +12,7 @@ var listCommand = make(map[string]factory)
 
 func register(name string, list factory) {
 	ok := false
-	for k, _ := range listCommand {
+	for k := range listCommand {
 		if name != k {
 			ok = true
 			continue
@@ -25,5 +25,8 @@ func register(name string, list factory) {
 }
 
 func new(name string) factory {
+	if listCommand[name] == nil {
+		log.Fatalf("command for driver with '%s' category is not available.\n\nUse `app [command] --help` for more information about a command. ", name)
+	}
 	return listCommand[name]
 }
