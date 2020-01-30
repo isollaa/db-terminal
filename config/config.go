@@ -94,4 +94,8 @@ func (c Config) SetFlag(cmd *cobra.Command) {
 		}
 		fmt.Printf("flag %s doesn't exist\n", key)
 	}
+	c[DB_CATEGORY] = c[DB_DRIVER]
+	if c[DB_CATEGORY] == "postgres" || c[DB_CATEGORY] == "mysql" {
+		c[DB_CATEGORY] = "sql"
+	}
 }

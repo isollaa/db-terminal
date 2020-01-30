@@ -39,7 +39,6 @@ func Connect(c t.Config, svc registry.Initial) error {
 			return err
 		}
 	}
-	svc.AutoFill(c)
 	err := svc.Connect(c)
 	if err != nil {
 		return err
@@ -85,4 +84,13 @@ func Validator(flg string, list map[string]string) error {
 	}
 	println()
 	return nil
+}
+
+func SetInit(c t.Config) registry.Initial {
+	if err := RequirementCheck(c, t.DB_DRIVER); err != nil {
+		log.Fatalf("error: %s", err)
+	}
+	svc := registry.NewDBInit(c[t.DB_CATEGORY].(string))
+	svc.AutoFill(c)
+	return svc
 }

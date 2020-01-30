@@ -22,8 +22,8 @@ var listInfo = map[string]string{
 }
 
 func exec(c t.Config, svc registry.Initial) error {
-	cmd := new(c[t.DB_CATEGORY].(string))
 	str := fmt.Sprintf("%sInfo", c[t.FLAG_STAT])
+	cmd := new(c[t.DB_CATEGORY].(string))
 	err := cmd(str, svc)
 	if err != nil {
 		service.Validator(c[t.FLAG_STAT].(string), listInfo)
@@ -38,11 +38,12 @@ func command(c t.Config) *cobra.Command {
 		Short: "Get information of selected connection",
 		Run: func(cmd *cobra.Command, args []string) {
 			c.SetFlag(cmd)
-			if err := service.RequirementCheck(c, t.DB_DRIVER, t.FLAG_STAT); err != nil {
-				log.Print("error: ", err)
+			svc := service.SetInit(c)
+			if err := service.RequirementCheck(c, t.FLAG_STAT); err != nil {
+				log.Fatalf("error: %s", err)
 				return
 			}
-			service.DoCommand(c, exec)
+			service.DoCommand(c, svc, exec)
 		},
 	}
 }

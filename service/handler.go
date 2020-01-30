@@ -7,12 +7,7 @@ import (
 	"github.com/isollaa/db-terminal/registry"
 )
 
-func DoCommand(c t.Config, commandFunc func(c t.Config, svc registry.Initial) error) {
-	c[t.DB_CATEGORY] = c[t.DB_DRIVER]
-	if c[t.DB_CATEGORY] == "postgres" || c[t.DB_CATEGORY] == "mysql" {
-		c[t.DB_CATEGORY] = "sql"
-	}
-	svc := registry.NewDBInit(c[t.DB_CATEGORY].(string))
+func DoCommand(c t.Config, svc registry.Initial, commandFunc func(t.Config, registry.Initial) error) {
 	if err := Connect(c, svc); err != nil {
 		log.Print("unable to connect: ", err)
 		return

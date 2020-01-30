@@ -25,11 +25,8 @@ func command(c t.Config) *cobra.Command {
 		Short: "Check ping of selected connection",
 		Run: func(cmd *cobra.Command, args []string) {
 			c.SetFlag(cmd)
-			if err := service.RequirementCheck(c, t.DB_DRIVER); err != nil {
-				log.Print("error: ", err)
-				return
-			}
-			service.DoCommand(c, exec)
+			svc := service.SetInit(c)
+			service.DoCommand(c, svc, exec)
 		},
 	}
 }

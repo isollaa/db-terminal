@@ -15,12 +15,12 @@ var listAttributes = map[string]string{
 }
 
 func exec(c t.Config, svc registry.Initial) error {
-	cmd := new(c[t.DB_CATEGORY].(string))
 	if c[t.FLAG_STAT] == t.FLAG_COLL {
 		if err := service.RequirementCheck(c, t.DB_COLLECTION); err != nil {
 			return err
 		}
 	}
+	cmd := new(c[t.DB_CATEGORY].(string))
 	err := cmd(c, svc)
 	if err != nil {
 		service.Validator(c[t.FLAG_STAT].(string), listAttributes)
@@ -36,11 +36,12 @@ func command(c t.Config) *cobra.Command {
 		Short: "list available database attributes",
 		Run: func(cmd *cobra.Command, args []string) {
 			c.SetFlag(cmd)
-			if err := service.RequirementCheck(c, t.DB_DRIVER, t.DB_DBNAME, t.FLAG_STAT); err != nil {
-				log.Print("error: ", err)
+			svc := service.SetInit(c)
+			if err := service.RequirementCheck(c, t.DB_DBNAME, t.FLAG_STAT); err != nil {
+				log.Fatalf("error: %s", err)
 				return
 			}
-			service.DoCommand(c, exec)
+			service.DoCommand(c, svc, exec)
 		},
 	}
 }

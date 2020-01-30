@@ -21,34 +21,20 @@ var listStatusType = map[string]string{
 }
 
 func exec(c t.Config, svc registry.Initial) error {
-	valid := false
 	if c[t.FLAG_STAT] == DISK {
 		if err := service.RequirementCheck(c, t.FLAG_TYPE); err != nil {
 			return err
-		}
-		if c[t.DB_DRIVER] == "postgres" {
-			if err := service.RequirementCheck(c, t.FLAG_PROMPT); err != nil {
-				return err
-			}
 		}
 		if c[t.FLAG_TYPE] == t.FLAG_COLL {
 			if err := service.RequirementCheck(c, t.DB_COLLECTION); err != nil {
 				return err
 			}
 		}
-		for k := range listStatusType {
-			if c[t.FLAG_TYPE] == k {
-				cmd := new(c[t.DB_CATEGORY].(string))
-				err := cmd(c, k, svc)
-				if err != nil {
-					return err
-				}
-				valid = true
-				return nil
-			}
-		}
-		if !valid {
+		cmd := new(c[t.DB_CATEGORY].(string))
+		err := cmd(c, c[t.FLAG_TYPE].(string), svc)
+		if err != nil {
 			service.Validator(c[t.FLAG_TYPE].(string), listStatusType)
+			return err
 		}
 	} else {
 		service.Validator(c[t.FLAG_STAT].(string), listStatus)
@@ -62,11 +48,17 @@ func command(c t.Config) *cobra.Command {
 		Short: "Get status of selected connection",
 		Run: func(cmd *cobra.Command, args []string) {
 			c.SetFlag(cmd)
-			if err := service.RequirementCheck(c, t.DB_DRIVER, t.FLAG_STAT); err != nil {
-				log.Print("error: ", err)
+			svc := service.SetInit(c)
+			if err := service.RequirementCheck(c, t.FLAG_STAT); err != nil {
+				log.Fatalf("error: %s", err)
 				return
 			}
-			service.DoCommand(c, exec)
+			if c[t.DB_DRIVER] == "postgres" {
+				if err := service.RequirementCheck(c, t.FLAG_PROMPT); err != nil {
+					log.Fatalf("error: %s", err)
+				}
+			}
+			service.DoCommand(c, svc, exec)
 		},
 	}
 }
