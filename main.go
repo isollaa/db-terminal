@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/isollaa/db-terminal/cmd"
+	_ "github.com/isollaa/db-terminal/cmd/command/info"
+	_ "github.com/isollaa/db-terminal/cmd/command/list"
 	_ "github.com/isollaa/db-terminal/cmd/command/ping"
 	_ "github.com/isollaa/db-terminal/cmd/command/stats"
 	_ "github.com/isollaa/db-terminal/cmd/init/mongo"

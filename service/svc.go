@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/isollaa/conn/helper"
 	m "github.com/isollaa/db-terminal/cmd/init/mongo"
@@ -25,7 +26,7 @@ func RequirementCheck(c t.Config, arg ...string) error {
 			if k == len(arg)-1 {
 				return fmt.Errorf(msg)
 			}
-			fmt.Print(msg)
+			log.Print("error: ", msg)
 		}
 	}
 	return nil

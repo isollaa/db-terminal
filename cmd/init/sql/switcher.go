@@ -18,6 +18,16 @@ func GetSource(c t.Config) string {
 	return source
 }
 
+func GetListSession(c t.Config) string {
+	switch c[t.FLAG_STAT] {
+	case t.FLAG_DB:
+		return GetQueryDB(c)
+	case t.FLAG_COLL:
+		return GetQueryTable(c)
+	}
+	return ""
+}
+
 func GetQueryDB(c t.Config) string {
 	query := ""
 	switch c[t.DB_DRIVER] {
