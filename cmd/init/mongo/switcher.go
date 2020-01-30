@@ -2,7 +2,7 @@ package mongo
 
 import (
 	"fmt"
-	t "github.com/isollaa/db-terminal/config"
+	t "github.com/isollaa/dbterm/config"
 )
 
 func GetListSession(c t.Config, s *Mongo) ([]string, error) {

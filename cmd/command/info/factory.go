@@ -3,7 +3,7 @@ package info
 import (
 	"log"
 
-	"github.com/isollaa/db-terminal/registry"
+	"github.com/isollaa/dbterm/registry"
 )
 
 type factory func(string, registry.Initial) error

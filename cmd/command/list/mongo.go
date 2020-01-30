@@ -1,9 +1,9 @@
 package list
 
 import (
-	m "github.com/isollaa/db-terminal/cmd/init/mongo"
-	t "github.com/isollaa/db-terminal/config"
-	"github.com/isollaa/db-terminal/registry"
+	m "github.com/isollaa/dbterm/cmd/init/mongo"
+	t "github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 )
 
 func mongo(c t.Config, svc registry.Initial) error {

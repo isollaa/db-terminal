@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	s "github.com/isollaa/db-terminal/cmd/init/sql"
-	t "github.com/isollaa/db-terminal/config"
-	"github.com/isollaa/db-terminal/registry"
+	s "github.com/isollaa/dbterm/cmd/init/sql"
+	t "github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 )
 
 func sql(c t.Config, info string, svc registry.Initial) error {

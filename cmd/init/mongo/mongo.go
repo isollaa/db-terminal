@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/globalsign/mgo"
-	t "github.com/isollaa/db-terminal/config"
-	"github.com/isollaa/db-terminal/registry"
+	t "github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 )
 
 type Mongo struct {

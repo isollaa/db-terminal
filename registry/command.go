@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/isollaa/conn/helper"
-	t "github.com/isollaa/db-terminal/config"
+	t "github.com/isollaa/dbterm/config"
 	"github.com/spf13/cobra"
 )
 

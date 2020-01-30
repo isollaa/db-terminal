@@ -3,7 +3,7 @@ package ping
 import (
 	"log"
 
-	"github.com/isollaa/db-terminal/registry"
+	"github.com/isollaa/dbterm/registry"
 )
 
 type factory func(registry.Initial) error

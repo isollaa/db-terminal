@@ -4,8 +4,8 @@ import (
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
-	t "github.com/isollaa/db-terminal/config"
-	"github.com/isollaa/db-terminal/registry"
+	t "github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 	_ "github.com/lib/pq"
 )
 

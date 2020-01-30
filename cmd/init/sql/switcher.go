@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	t "github.com/isollaa/db-terminal/config"
+	t "github.com/isollaa/dbterm/config"
 )
 
 func GetSource(c t.Config) string {

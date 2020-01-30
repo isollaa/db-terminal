@@ -5,10 +5,10 @@ import (
 	"log"
 
 	"github.com/isollaa/conn/helper"
-	m "github.com/isollaa/db-terminal/cmd/init/mongo"
-	s "github.com/isollaa/db-terminal/cmd/init/sql"
-	t "github.com/isollaa/db-terminal/config"
-	"github.com/isollaa/db-terminal/registry"
+	m "github.com/isollaa/dbterm/cmd/init/mongo"
+	s "github.com/isollaa/dbterm/cmd/init/sql"
+	t "github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 	"golang.org/x/crypto/ssh/terminal"
 )
 

@@ -3,9 +3,9 @@ package list
 import (
 	"log"
 
-	t "github.com/isollaa/db-terminal/config"
-	"github.com/isollaa/db-terminal/registry"
-	"github.com/isollaa/db-terminal/service"
+	t "github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
+	"github.com/isollaa/dbterm/service"
 	"github.com/spf13/cobra"
 )
 

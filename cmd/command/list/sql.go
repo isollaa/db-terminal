@@ -2,9 +2,9 @@ package list
 
 import (
 	_ "github.com/go-sql-driver/mysql"
-	s "github.com/isollaa/db-terminal/cmd/init/sql"
-	t "github.com/isollaa/db-terminal/config"
-	"github.com/isollaa/db-terminal/registry"
+	s "github.com/isollaa/dbterm/cmd/init/sql"
+	t "github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 )
 
 func sql(c t.Config, svc registry.Initial) error {

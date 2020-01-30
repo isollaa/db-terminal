@@ -3,8 +3,8 @@ package ping
 import (
 	"fmt"
 
-	m "github.com/isollaa/db-terminal/cmd/init/mongo"
-	"github.com/isollaa/db-terminal/registry"
+	m "github.com/isollaa/dbterm/cmd/init/mongo"
+	"github.com/isollaa/dbterm/registry"
 )
 
 func mongo(svc registry.Initial) error {

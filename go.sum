@@ -18,8 +18,8 @@ github.com/hokaccha/go-prettyjson v0.0.0-20190818114111-108c894c2c0e/go.mod h1:p
 github.com/inconshreveable/mousetrap v1.0.0/go.mod h1:PxqpIevigyE2G7u3NXJIT2ANytuPF1OarO4DADm73n8=
 github.com/isollaa/conn v0.0.0-20200128153143-9262f5f5e924 h1:+ANRW5YJ2jbdGQSzu/EQ6EbArxugF1+8CTxwFRhQx+Q=
 github.com/isollaa/conn v0.0.0-20200128153143-9262f5f5e924/go.mod h1:CIyP2RYrfjYp20FK2sLs8wc1/TlA16Yf1/NlXM/AUfc=
-github.com/isollaa/db-terminal v0.0.0-20200129014403-3f5764d7361a h1:l6tOBgdSF2z6iL1RyL+r2cP/8VLz0fBRTctVebPjihk=
-github.com/isollaa/db_terminal v0.0.0-20200129014403-3f5764d7361a h1:vZSuRNS0xPDnnOJ6DguX/RRWm17R9uOot8JacSe/lxk=
+github.com/isollaa/db-terminal v0.0.0-20200130074959-2cf6ebe5052d h1:E+bV1JjLzj9HLbaxaA3XX1yhpSoIODsqcYXIYMUSUcE=
+github.com/isollaa/db-terminal v0.0.0-20200130074959-2cf6ebe5052d/go.mod h1:04TtqKJkExdbybDt3sEDmNd6u8Y0+oO3yssp8+3LVtk=
 github.com/lib/pq v1.3.0 h1:/qkRGz8zljWiDcFvgpwUpwIAPu3r07TDvs3Rws+o/pU=
 github.com/lib/pq v1.3.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/magiconair/properties v1.8.0/go.mod h1:PppfXfuXeibc/6YijjN8zIbojt8czPbwD3XqdrwzmxQ=
@@ -48,6 +48,8 @@ golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9/go.mod h1:6SG95UA2DQfeDnf
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20200117160349-530e935923ad h1:Jh8cai0fqIK+f6nG0UgPW5wFk8wmiMhM3AyciDBdtQg=
 golang.org/x/crypto v0.0.0-20200117160349-530e935923ad/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
+golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d h1:9FCpayM9Egr1baVnV1SX0H87m+XB0B8S0hAMi99X/3U=
+golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
 golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3/go.mod h1:t9HGtf8HONx5eT2rtn7q6eTqICYqUVnKs3thJo3Qplg=
 golang.org/x/sys v0.0.0-20181205085412-a5c9d58dba9a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=

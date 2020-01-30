@@ -3,8 +3,8 @@ package stats
 import (
 	"log"
 
-	t "github.com/isollaa/db-terminal/config"
-	"github.com/isollaa/db-terminal/registry"
+	t "github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 )
 
 type factory func(t.Config, string, registry.Initial) error
