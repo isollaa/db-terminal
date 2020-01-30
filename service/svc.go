@@ -57,15 +57,7 @@ func promptPassword(c t.Config) error {
 	return nil
 }
 
-func DoPrint(c t.Config, svc registry.Initial) error {
-	var res interface{}
-	if ss, ok := svc.(*m.Mongo); ok {
-		res = ss.Result
-	} else {
-		ss := svc.(*s.SQL)
-		res = ss.Result
-	}
-
+func DoPrint(c t.Config,res interface{}) error {
 	if c[t.FLAG_BEAUTY].(bool) {
 		if err := helper.PrintPretty(res); err != nil {
 			return err

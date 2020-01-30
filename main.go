@@ -1,15 +1,22 @@
 package dbterm
 
 import (
-	"github.com/isollaa/dbterm/config"
-	"github.com/isollaa/dbterm/registry"
+	"os"
+	"path/filepath"
+
 	"github.com/spf13/cobra"
 )
 
-var rootCmd = &cobra.Command{Use: "app"}
+func Exec() error {
+	rootCmd := &cobra.Command{
+		Use:   filepath.Base(os.Args[0]),
+		Short: "DB Terminal",
+		Long:  "Database monitoring tool",
+		Run: func(cmd *cobra.Command, args []string) {
+			cmd.Usage()
+		},
+	}
 
-func init() {
-	//global
 	rootCmd.PersistentFlags().StringP("driver", "d", "", "connection driver name (mongo / mysql / postgres)")
 	rootCmd.PersistentFlags().StringP("host", "H", "localhost", "connection host ")
 	rootCmd.PersistentFlags().IntP("port", "P", 0, "connection port (default - mongo:27017 / mysql:3306 / postgres:5432)")
@@ -18,15 +25,29 @@ func init() {
 	rootCmd.PersistentFlags().StringP("collection", "c", "", "connection database collection name")
 	rootCmd.PersistentFlags().StringP("stat", "s", "", "connection information")
 	rootCmd.PersistentFlags().StringP("type", "t", "", "connection information type")
-	//optional
 	rootCmd.PersistentFlags().BoolP("beauty", "b", false, "show pretty version of json")
 	rootCmd.PersistentFlags().BoolP("prompt", "p", false, "call password prompt")
-}
 
-func Exec() error {
-	c := config.SetConfig()
-	for _, v := range registry.NewCommand() {
-		rootCmd.AddCommand(v(c))
+	for _, command := range listCommand {
+		rootCmd.AddCommand(command(setConfig))
 	}
 	return rootCmd.Execute()
+}
+
+func setConfig(cmd *cobra.Command) Config {
+	c := Config{
+		DB_DRIVER:     "",
+		DB_HOST:       "",
+		DB_PORT:       0,
+		DB_USERNAME:   "",
+		DB_PASSWORD:   "",
+		DB_DBNAME:     "",
+		DB_COLLECTION: "",
+		DB_CATEGORY:   "",
+		FLAG_STAT:     "",
+		FLAG_TYPE:     "",
+		FLAG_BEAUTY:   false,
+		FLAG_PROMPT:   false,
+	}
+	return c.setFlag(cmd)
 }

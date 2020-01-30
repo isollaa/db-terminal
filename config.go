@@ -1,4 +1,4 @@
-package config
+package dbterm
 
 import (
 	"fmt"
@@ -26,23 +26,6 @@ const (
 
 type Config map[string]interface{}
 
-func SetConfig() Config {
-	return Config{
-		DB_DRIVER:     "",
-		DB_HOST:       "",
-		DB_PORT:       0,
-		DB_USERNAME:   "",
-		DB_PASSWORD:   "",
-		DB_DBNAME:     "",
-		DB_COLLECTION: "",
-		DB_CATEGORY:   "",
-		FLAG_STAT:     "",
-		FLAG_TYPE:     "",
-		FLAG_BEAUTY:   false,
-		FLAG_PROMPT:   false,
-	}
-}
-
 func RequirementCase(v string) string {
 	switch v {
 	case DB_DRIVER:
@@ -68,10 +51,10 @@ func RequirementCase(v string) string {
 	case FLAG_PROMPT:
 		return "-p"
 	}
-	return ""
+	return v
 }
 
-func (c Config) SetFlag(cmd *cobra.Command) {
+func (c Config) setFlag(cmd *cobra.Command) Config {
 	for key := range c {
 		if key == DB_PASSWORD || key == DB_CATEGORY {
 			continue
@@ -98,4 +81,5 @@ func (c Config) SetFlag(cmd *cobra.Command) {
 	if c[DB_CATEGORY] == "postgres" || c[DB_CATEGORY] == "mysql" {
 		c[DB_CATEGORY] = "sql"
 	}
+	return c
 }

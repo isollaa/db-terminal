@@ -1,21 +1,22 @@
-package registry
+package dbterm
 
 import (
 	"log"
 
 	"github.com/isollaa/conn/helper"
-	t "github.com/isollaa/dbterm/config"
 	"github.com/spf13/cobra"
 )
 
-type commandFactory func(t.Config) *cobra.Command
+var listCommand map[string]commandFactory
 
-var listCommand = make(map[string]commandFactory)
+type ConfigParser func(*cobra.Command) Config
+
+type commandFactory func(ConfigParser) *cobra.Command
 
 func RegisterCommand(list commandFactory) {
 	name := helper.GetPackageName(list)
 	ok := false
-	for k, _ := range listCommand {
+	for k := range listCommand {
 		if name != k {
 			ok = true
 			continue
@@ -25,8 +26,4 @@ func RegisterCommand(list commandFactory) {
 	if ok || len(listCommand) == 0 {
 		listCommand[name] = list
 	}
-}
-
-func NewCommand() map[string]commandFactory {
-	return listCommand
 }
