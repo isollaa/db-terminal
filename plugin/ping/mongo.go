@@ -15,7 +15,3 @@ func (m *mongo) Ping(config dbterm.Config) error {
 
 	return db.Ping()
 }
-
-func init() {
-	supportedDB["mongo"] = &mongo{}
-}

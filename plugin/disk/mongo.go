@@ -27,7 +27,3 @@ func (s *mongo) Disk(config dbterm.Config) error {
 	s.Result = result
 	return nil
 }
-
-func init() {
-	supportedDB["mongo"] = &mongo{}
-}

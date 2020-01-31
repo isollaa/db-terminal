@@ -9,12 +9,6 @@ import (
 )
 
 func MongoDial(config dbterm.Config) (*mgo.Session, error) {
-	if config[dbterm.PORT] == 0 {
-		config[dbterm.PORT] = 27017
-	}
-	if config[dbterm.DBNAME] == "" {
-		config[dbterm.DBNAME] = "xsaas_ctms"
-	}
 	dsn := fmt.Sprintf("mongodb://%s:%d/%s",
 		config[dbterm.HOST],
 		config[dbterm.PORT],

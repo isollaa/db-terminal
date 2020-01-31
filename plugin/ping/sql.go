@@ -17,7 +17,3 @@ func (m *sql) Ping(config dbterm.Config) error {
 
 	return db.Ping()
 }
-
-func init() {
-	supportedDB["sql"] = &sql{}
-}

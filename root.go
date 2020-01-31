@@ -54,6 +54,15 @@ func setConfig(cmd *cobra.Command) Config {
 	if err := RequirementCheck(c, DRIVER); err != nil {
 		log.Fatalf("error: %s", err)
 	}
+	if err := setConfigByYaml(c); err != nil {
+		log.Println("unable to", err)
+	}
+	if c[FLAG_PROMPT].(bool) {
+		err := promptPassword(c)
+		if err != nil {
+			log.Fatalf("error: %s", err)
+		}
+	}
 	c[CATEGORY] = c[DRIVER]
 	if c[CATEGORY] == "postgres" || c[CATEGORY] == "mysql" {
 		c[CATEGORY] = "sql"

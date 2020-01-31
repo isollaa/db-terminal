@@ -1,3 +1,5 @@
+// +build disk
+
 package disk
 
 import (
@@ -26,7 +28,7 @@ func command(parser dbterm.ConfigParser) *cobra.Command {
 		Short: "Database disk usage status",
 		Run: func(cmd *cobra.Command, args []string) {
 			config := parser(cmd)
-			if err := dbterm.RequirementCheck(config, dbterm.FLAG_STAT, dbterm.PASSWORD); err != nil {
+			if err := dbterm.RequirementCheck(config, dbterm.FLAG_STAT); err != nil {
 				log.Fatalf("error: %s", err)
 				return
 			}
@@ -54,4 +56,6 @@ func command(parser dbterm.ConfigParser) *cobra.Command {
 
 func init() {
 	dbterm.RegisterCommand(command)
+	supportedDB["mongo"] = &mongo{}
+	supportedDB["sql"] = &sql{}
 }

@@ -1,3 +1,5 @@
+// +build ping
+
 package ping
 
 import (
@@ -47,4 +49,6 @@ func command(parser dbterm.ConfigParser) *cobra.Command {
 
 func init() {
 	dbterm.RegisterCommand(command)
+	supportedDB["mongo"] = &mongo{}
+	supportedDB["sql"] = &sql{}
 }

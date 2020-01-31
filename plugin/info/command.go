@@ -1,3 +1,5 @@
+// +build info
+
 package info
 
 import (
@@ -54,4 +56,5 @@ func command(parser dbterm.ConfigParser) *cobra.Command {
 
 func init() {
 	dbterm.RegisterCommand(command)
+	supportedDB["mongo"] = &mongo{}
 }

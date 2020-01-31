@@ -9,21 +9,6 @@ import (
 
 type postgres struct{}
 
-func (m *postgres) Autofill(config dbterm.Config) {
-	if config[dbterm.PORT] == 0 {
-		config[dbterm.PORT] = 5432
-	}
-	if config[dbterm.DBNAME] == "" {
-		config[dbterm.DBNAME] = "postgres"
-	}
-	if config[dbterm.USERNAME] == "" {
-		config[dbterm.USERNAME] = "postgres"
-	}
-	if config[dbterm.PASSWORD] == "" {
-		config[dbterm.PASSWORD] = "12345"
-	}
-}
-
 func (m *postgres) DSNFormat() string {
 	return "postgres://%s:%s@%s:%d/%s?sslmode=require"
 }

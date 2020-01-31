@@ -4,8 +4,41 @@ import (
 	"fmt"
 
 	"github.com/isollaa/conn/helper"
+	"github.com/isollaa/dbterm/setup"
 	"golang.org/x/crypto/ssh/terminal"
 )
+
+func setConfigByYaml(c Config) error {
+	v, err := setup.GetYamlConfig()
+	if err != nil {
+		return err
+	}
+	if c[HOST] == "" {
+		c[HOST] = v.Driver[c[DRIVER].(string)].Host
+	}
+	if c[PORT] == 0 {
+		c[PORT] = v.Driver[c[DRIVER].(string)].Port
+	}
+	if c[USERNAME] == "" {
+		c[USERNAME] = v.Driver[c[DRIVER].(string)].Username
+	}
+	if c[PASSWORD] == "" && !c[FLAG_PROMPT].(bool) {
+		c[PASSWORD] = v.Driver[c[DRIVER].(string)].Password
+	}
+	if c[DBNAME] == "" {
+		c[DBNAME] = v.Driver[c[DRIVER].(string)].DBName
+	}
+	if c[COLLECTION] == "" {
+		c[COLLECTION] = v.Driver[c[DRIVER].(string)].DBName
+	}
+	if v.Beautify {
+		c[FLAG_BEAUTY] = v.Beautify
+	}
+	if v.Prompt {
+		c[FLAG_PROMPT] = v.Prompt
+	}
+	return nil
+}
 
 func promptPassword(c Config) error {
 	print("Input database password : ")

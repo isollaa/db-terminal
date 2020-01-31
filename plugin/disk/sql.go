@@ -39,7 +39,3 @@ func (s *sql) Disk(config dbterm.Config) error {
 	s.Result = fmt.Sprintf("%s, Disk Size: %s", v["title"], table)
 	return nil
 }
-
-func init() {
-	supportedDB["sql"] = &sql{}
-}

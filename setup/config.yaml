@@ -1,0 +1,24 @@
+driver:
+    mongo:
+        host:        "localhost"
+        port:        27017
+        username:    ""
+        password:    ""
+        dbname:      "xsaas_ctms"
+        collection:  "relationship"
+    mysql:
+        host:        "localhost"
+        port:        3306
+        username:    "root"
+        password:    ""
+        dbname:      "mqtt"
+        collection:  "ListClient"
+    postgres:
+        host:        "localhost"
+        port:        5432
+        username:    "postgres"
+        password:    "12345"
+        dbname:      "postgres"
+        collection:  "listclient" 
+beauty: false
+prompt: false

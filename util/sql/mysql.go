@@ -10,18 +10,6 @@ import (
 
 type mysql struct{}
 
-func (m *mysql) Autofill(config dbterm.Config) {
-	if config[dbterm.PORT] == 0 {
-		config[dbterm.PORT] = 3306
-	}
-	if config[dbterm.DBNAME] == "" {
-		config[dbterm.DBNAME] = "mqtt"
-	}
-	if config[dbterm.USERNAME] == "" {
-		config[dbterm.USERNAME] = "root"
-	}
-}
-
 func (m *mysql) DSNFormat() string {
 	return "%s:%s@tcp(%s:%d)/%s"
 }

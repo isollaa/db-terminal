@@ -10,7 +10,6 @@ import (
 var ListSQL = map[string]SQL{}
 
 type SQL interface {
-	Autofill(dbterm.Config)
 	DSNFormat() string
 	GetQueryDB() string
 	GetQueryTable() string
@@ -19,7 +18,6 @@ type SQL interface {
 
 func SQLDial(config dbterm.Config) (*sql.DB, error) {
 	t := config[dbterm.DRIVER].(string)
-	ListSQL[t].Autofill(config)
 	dsn := fmt.Sprintf(ListSQL[t].DSNFormat(),
 		config[dbterm.USERNAME],
 		config[dbterm.PASSWORD],

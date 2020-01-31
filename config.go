@@ -57,13 +57,6 @@ func requirementCase(v string) string {
 
 func RequirementCheck(c Config, arg ...string) error {
 	for k, v := range arg {
-		if v == PASSWORD {
-			err := promptPassword(c)
-			if err != nil {
-				return err
-			}
-			continue
-		}
 		flag := requirementCase(v)
 		msg := ""
 		switch c[v] {

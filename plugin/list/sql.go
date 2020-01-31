@@ -28,7 +28,3 @@ func (s *sql) List(config dbterm.Config) error {
 	s.Result = result
 	return nil
 }
-
-func init() {
-	supportedDB["sql"] = &sql{}
-}

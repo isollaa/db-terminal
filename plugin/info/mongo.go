@@ -32,7 +32,3 @@ func (m *mongo) Info(config dbterm.Config) error {
 
 	return nil
 }
-
-func init() {
-	supportedDB["mongo"] = &mongo{}
-}
