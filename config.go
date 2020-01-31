@@ -2,19 +2,20 @@ package dbterm
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/spf13/cobra"
 )
 
 const (
-	DB_DRIVER     = "driver"
-	DB_HOST       = "host"
-	DB_PORT       = "port"
-	DB_USERNAME   = "username"
-	DB_PASSWORD   = "password"
-	DB_DBNAME     = "dbname"
-	DB_COLLECTION = "collection"
-	DB_CATEGORY   = "category"
+	DRIVER     = "driver"
+	HOST       = "host"
+	PORT       = "port"
+	USERNAME   = "username"
+	PASSWORD   = "password"
+	DBNAME     = "dbname"
+	COLLECTION = "collection"
+	CATEGORY   = "category"
 
 	FLAG_DB     = "db"
 	FLAG_COLL   = "coll"
@@ -26,21 +27,21 @@ const (
 
 type Config map[string]interface{}
 
-func RequirementCase(v string) string {
+func requirementCase(v string) string {
 	switch v {
-	case DB_DRIVER:
+	case DRIVER:
 		return "-d"
-	case DB_HOST:
+	case HOST:
 		return "-H"
-	case DB_PORT:
+	case PORT:
 		return "-P"
-	case DB_USERNAME:
+	case USERNAME:
 		return "-u"
-	case DB_PASSWORD:
+	case PASSWORD:
 		return "-p"
-	case DB_DBNAME:
+	case DBNAME:
 		return "--dbname"
-	case DB_COLLECTION:
+	case COLLECTION:
 		return "-c"
 	case FLAG_STAT:
 		return "-s"
@@ -54,9 +55,36 @@ func RequirementCase(v string) string {
 	return v
 }
 
-func (c Config) setFlag(cmd *cobra.Command) Config {
+func RequirementCheck(c Config, arg ...string) error {
+	for k, v := range arg {
+		if v == PASSWORD {
+			err := promptPassword(c)
+			if err != nil {
+				return err
+			}
+			continue
+		}
+		flag := requirementCase(v)
+		msg := ""
+		switch c[v] {
+		case "", 0:
+			msg = fmt.Sprintf("Command needs flag with argument: %s `%s`\n", flag, v)
+		case false:
+			msg = fmt.Sprintf("Command needs flag: %s\n", flag)
+		}
+		if msg != "" {
+			if k == len(arg)-1 {
+				return fmt.Errorf(msg)
+			}
+			log.Print("error: ", msg)
+		}
+	}
+	return nil
+}
+
+func (c Config) setConfig(cmd *cobra.Command) {
 	for key := range c {
-		if key == DB_PASSWORD || key == DB_CATEGORY {
+		if key == PASSWORD || key == CATEGORY {
 			continue
 		}
 		if v, err := cmd.Flags().GetString(key); err == nil {
@@ -77,9 +105,4 @@ func (c Config) setFlag(cmd *cobra.Command) Config {
 		}
 		fmt.Printf("flag %s doesn't exist\n", key)
 	}
-	c[DB_CATEGORY] = c[DB_DRIVER]
-	if c[DB_CATEGORY] == "postgres" || c[DB_CATEGORY] == "mysql" {
-		c[DB_CATEGORY] = "sql"
-	}
-	return c
 }

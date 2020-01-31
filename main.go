@@ -1,6 +1,7 @@
 package dbterm
 
 import (
+	"log"
 	"os"
 	"path/filepath"
 
@@ -36,18 +37,26 @@ func Exec() error {
 
 func setConfig(cmd *cobra.Command) Config {
 	c := Config{
-		DB_DRIVER:     "",
-		DB_HOST:       "",
-		DB_PORT:       0,
-		DB_USERNAME:   "",
-		DB_PASSWORD:   "",
-		DB_DBNAME:     "",
-		DB_COLLECTION: "",
-		DB_CATEGORY:   "",
-		FLAG_STAT:     "",
-		FLAG_TYPE:     "",
-		FLAG_BEAUTY:   false,
-		FLAG_PROMPT:   false,
+		DRIVER:      "",
+		HOST:        "",
+		PORT:        0,
+		USERNAME:    "",
+		PASSWORD:    "",
+		DBNAME:      "",
+		COLLECTION:  "",
+		CATEGORY:    "",
+		FLAG_STAT:   "",
+		FLAG_TYPE:   "",
+		FLAG_BEAUTY: false,
+		FLAG_PROMPT: false,
 	}
-	return c.setFlag(cmd)
+	c.setConfig(cmd)
+	if err := RequirementCheck(c, DRIVER); err != nil {
+		log.Fatalf("error: %s", err)
+	}
+	c[CATEGORY] = c[DRIVER]
+	if c[CATEGORY] == "postgres" || c[CATEGORY] == "mysql" {
+		c[CATEGORY] = "sql"
+	}
+	return c
 }

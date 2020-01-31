@@ -4,6 +4,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/isollaa/dbterm"
 	"github.com/isollaa/dbterm/util"
+	_ "github.com/lib/pq"
 )
 
 type sql struct{}

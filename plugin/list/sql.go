@@ -1,15 +1,20 @@
 package list
 
 import (
-	_ "github.com/go-sql-driver/mysql"
-	s "github.com/isollaa/dbterm/cmd/init/sql"
-	t "github.com/isollaa/dbterm/config"
-	"github.com/isollaa/dbterm/registry"
+	"github.com/isollaa/dbterm"
+	"github.com/isollaa/dbterm/util"
 )
 
-func sql(c t.Config, svc registry.Initial) error {
-	ss := svc.(*s.SQL)
-	rows, err := ss.Session.Query(s.GetListSession(c))
+type sql struct {
+	Result interface{}
+}
+
+func (s *sql) List(config dbterm.Config) error {
+	session, err := util.SQLDial(config)
+	if err != nil {
+		return err
+	}
+	rows, err := session.Query(util.GetSQLListSession(config))
 	if err != nil {
 		return err
 	}
@@ -20,10 +25,10 @@ func sql(c t.Config, svc registry.Initial) error {
 		rows.Scan(&res)
 		result = append(result, res)
 	}
-	ss.Result = result
+	s.Result = result
 	return nil
 }
 
 func init() {
-	register("sql", sql)
+	supportedDB["sql"] = &sql{}
 }

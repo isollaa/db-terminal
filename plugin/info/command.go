@@ -3,10 +3,9 @@ package info
 import (
 	"fmt"
 	"log"
+	"os"
 
-	t "github.com/isollaa/dbterm/config"
-	"github.com/isollaa/dbterm/registry"
-	"github.com/isollaa/dbterm/service"
+	"github.com/isollaa/dbterm"
 	"github.com/spf13/cobra"
 )
 
@@ -16,38 +15,43 @@ const (
 )
 
 var listInfo = map[string]string{
-	SERVER:    "server info of selected driver",
-	BUILD:     "build info of selected driver",
-	t.DB_HOST: "host info of selected driver",
+	SERVER:      "server info of selected driver",
+	BUILD:       "build info of selected driver",
+	dbterm.HOST: "host info of selected driver",
 }
 
-func exec(c t.Config, svc registry.Initial) error {
-	str := fmt.Sprintf("%sInfo", c[t.FLAG_STAT])
-	cmd := new(c[t.DB_CATEGORY].(string))
-	err := cmd(str, svc)
-	if err != nil {
-		service.Validator(c[t.FLAG_STAT].(string), listInfo)
-		return err
-	}
-	return nil
+var supportedDB = map[string]commander{}
+
+type commander interface {
+	Info(dbterm.Config) error
 }
 
-func command(c t.Config) *cobra.Command {
+func command(parser dbterm.ConfigParser) *cobra.Command {
 	return &cobra.Command{
 		Use:   "info",
-		Short: "Get information of selected connection",
+		Short: "Database information",
 		Run: func(cmd *cobra.Command, args []string) {
-			c.SetFlag(cmd)
-			svc := service.SetInit(c)
-			if err := service.RequirementCheck(c, t.FLAG_STAT); err != nil {
+			config := parser(cmd)
+			if err := dbterm.RequirementCheck(config, dbterm.FLAG_STAT); err != nil {
 				log.Fatalf("error: %s", err)
 				return
 			}
-			service.DoCommand(c, svc, exec)
+			t := config[dbterm.CATEGORY].(string)
+			command, supported := supportedDB[t]
+			if !supported {
+				fmt.Printf("Info not supported on selected database: %s \n", config[dbterm.DRIVER])
+				os.Exit(1)
+			}
+			if err := command.Info(config); err != nil {
+				dbterm.Validator(config[dbterm.FLAG_STAT].(string), listInfo)
+				fmt.Println(err)
+				os.Exit(1)
+			}
+			dbterm.DoPrint(config, command)
 		},
 	}
 }
 
 func init() {
-	registry.RegisterCommand(command)
+	dbterm.RegisterCommand(command)
 }

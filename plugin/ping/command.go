@@ -7,13 +7,12 @@ import (
 	"time"
 
 	"github.com/isollaa/dbterm"
-	"github.com/isollaa/dbterm/service"
 	"github.com/spf13/cobra"
 )
 
-var supportedDB = map[string]Commander{}
+var supportedDB = map[string]commander{}
 
-type Commander interface {
+type commander interface {
 	Ping(dbterm.Config) error
 }
 
@@ -23,26 +22,22 @@ func command(parser dbterm.ConfigParser) *cobra.Command {
 		Short: "Database availability check",
 		Run: func(cmd *cobra.Command, args []string) {
 			config := parser(cmd)
-
-			t := config[dbterm.DB_DRIVER].(string)
-			if t == "mysql" || t == "postgres" {
-				t = "sql"
-			}
-			commander, supported := supportedDB[t]
+			t := config[dbterm.CATEGORY].(string)
+			command, supported := supportedDB[t]
 			if !supported {
-				fmt.Printf("Ping not supported on selected database: %s \n", t)
+				fmt.Printf("Ping not supported on selected database: %s \n", config[dbterm.DRIVER])
 				os.Exit(1)
 			}
-
+			fmt.Printf("--%s\nPinging %s...\n", config[dbterm.DRIVER], config[dbterm.HOST])
 			start := time.Now()
 			defer func() {
-				if err := service.DoPrint(config, fmt.Sprintf("Ping done in %d ms \n", time.Now().Sub(start).Microseconds())); err != nil {
+				if err := dbterm.DoPrint(config, fmt.Sprintf("Ping done in %d ms", time.Now().Sub(start).Microseconds())); err != nil {
 					log.Print("unable to print: ", err)
 					return
 				}
 			}()
 
-			if err := commander.Ping(config); err != nil {
+			if err := command.Ping(config); err != nil {
 				fmt.Println(err)
 				os.Exit(1)
 			}

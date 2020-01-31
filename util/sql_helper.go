@@ -11,18 +11,21 @@ var ListSQL = map[string]SQL{}
 
 type SQL interface {
 	Autofill(dbterm.Config)
+	DSNFormat() string
+	GetQueryDB() string
+	GetQueryTable() string
+	GetDiskSpace(config dbterm.Config) (map[string]string, error)
 }
 
 func SQLDial(config dbterm.Config) (*sql.DB, error) {
-	t := config[dbterm.DB_DRIVER].(string)
+	t := config[dbterm.DRIVER].(string)
 	ListSQL[t].Autofill(config)
-	dsn := fmt.Sprintf("%s://%s:%s@%s:%d/%s?sslmode=require",
-		config[dbterm.DB_DRIVER],
-		config[dbterm.DB_USERNAME],
-		config[dbterm.DB_PASSWORD],
-		config[dbterm.DB_HOST],
-		config[dbterm.DB_PORT],
-		config[dbterm.DB_DBNAME],
+	dsn := fmt.Sprintf(ListSQL[t].DSNFormat(),
+		config[dbterm.USERNAME],
+		config[dbterm.PASSWORD],
+		config[dbterm.HOST],
+		config[dbterm.PORT],
+		config[dbterm.DBNAME],
 	)
 
 	db, err := sql.Open(t, dsn)
@@ -33,4 +36,20 @@ func SQLDial(config dbterm.Config) (*sql.DB, error) {
 	// add conn setting
 
 	return db, nil
+}
+
+func GetSQLListSession(config dbterm.Config) string {
+	t := config[dbterm.DRIVER].(string)
+	switch config[dbterm.FLAG_STAT] {
+	case dbterm.FLAG_DB:
+		return ListSQL[t].GetQueryDB()
+	case dbterm.FLAG_COLL:
+		return ListSQL[t].GetQueryTable()
+	}
+	return ""
+}
+
+func GetSQLDiskQuery(config dbterm.Config) (map[string]string, error) {
+	t := config[dbterm.DRIVER].(string)
+	return ListSQL[t].GetDiskSpace(config)
 }

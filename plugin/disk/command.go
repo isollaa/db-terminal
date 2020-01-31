@@ -1,4 +1,4 @@
-package list
+package disk
 
 import (
 	"fmt"
@@ -10,23 +10,23 @@ import (
 )
 
 var listAttributes = map[string]string{
-	dbterm.FLAG_DB:   "list databases on selected driver",
-	dbterm.FLAG_COLL: "list collection on selected database",
+	dbterm.FLAG_DB:   "disk usage of selected database",
+	dbterm.FLAG_COLL: "disk usage of selected collection",
 }
 
 var supportedDB = map[string]commander{}
 
 type commander interface {
-	List(dbterm.Config) error
+	Disk(dbterm.Config) error
 }
 
 func command(parser dbterm.ConfigParser) *cobra.Command {
 	return &cobra.Command{
-		Use:   "list",
-		Short: "Database attribute list",
+		Use:   "disk",
+		Short: "Database disk usage status",
 		Run: func(cmd *cobra.Command, args []string) {
 			config := parser(cmd)
-			if err := dbterm.RequirementCheck(config, dbterm.FLAG_STAT); err != nil {
+			if err := dbterm.RequirementCheck(config, dbterm.FLAG_STAT, dbterm.PASSWORD); err != nil {
 				log.Fatalf("error: %s", err)
 				return
 			}
@@ -42,7 +42,7 @@ func command(parser dbterm.ConfigParser) *cobra.Command {
 				fmt.Printf("List not supported on selected database: %s \n", config[dbterm.DRIVER])
 				os.Exit(1)
 			}
-			if err := command.List(config); err != nil {
+			if err := command.Disk(config); err != nil {
 				dbterm.Validator(config[dbterm.FLAG_STAT].(string), listAttributes)
 				fmt.Println(err)
 				os.Exit(1)

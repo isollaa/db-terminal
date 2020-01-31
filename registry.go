@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var listCommand map[string]commandFactory
+var listCommand = make(map[string]commandFactory)
 
 type ConfigParser func(*cobra.Command) Config
 
