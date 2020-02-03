@@ -19,10 +19,10 @@ func Exec() error {
 	}
 
 	rootCmd.PersistentFlags().StringP("driver", "d", "", "connection driver name (mongo / mysql / postgres)")
-	rootCmd.PersistentFlags().StringP("host", "H", "localhost", "connection host ")
-	rootCmd.PersistentFlags().IntP("port", "P", 0, "connection port (default - mongo:27017 / mysql:3306 / postgres:5432)")
-	rootCmd.PersistentFlags().StringP("username", "u", "", "database username (default - mysql:root / postgres:postgres)")
-	rootCmd.PersistentFlags().String("dbname", "", "connection database name (default - mongo:xsaas_ctms / mysql:mqtt)")
+	rootCmd.PersistentFlags().StringP("host", "H", "", "connection host")
+	rootCmd.PersistentFlags().IntP("port", "P", 0, "connection port")
+	rootCmd.PersistentFlags().StringP("username", "u", "", "database username")
+	rootCmd.PersistentFlags().String("dbname", "", "connection database name")
 	rootCmd.PersistentFlags().StringP("collection", "c", "", "connection database collection name")
 	rootCmd.PersistentFlags().StringP("stat", "s", "", "connection information")
 	rootCmd.PersistentFlags().StringP("type", "t", "", "connection information type")
