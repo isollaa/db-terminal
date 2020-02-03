@@ -1,6 +1,8 @@
 package list
 
 import (
+	"fmt"
+
 	"github.com/isollaa/dbterm"
 	"github.com/isollaa/dbterm/util"
 )
@@ -14,7 +16,11 @@ func (s *sql) List(config dbterm.Config) error {
 	if err != nil {
 		return err
 	}
-	rows, err := session.Query(util.GetSQLListSession(config))
+	query := util.GetSQLListSession(config)
+	if query == "" {
+		return fmt.Errorf("Error: unable to get query")
+	}
+	rows, err := session.Query(query)
 	if err != nil {
 		return err
 	}
