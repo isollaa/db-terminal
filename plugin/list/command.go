@@ -45,7 +45,7 @@ func command(parser dbterm.ConfigParser) *cobra.Command {
 				os.Exit(1)
 			}
 			if err := command.List(config); err != nil {
-				dbterm.Validator(config[dbterm.FLAG_STAT].(string), listAttributes)
+				dbterm.FlagHelper(config[dbterm.FLAG_STAT].(string), listAttributes)
 				fmt.Println(err)
 				os.Exit(1)
 			}

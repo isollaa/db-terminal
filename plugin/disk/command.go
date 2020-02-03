@@ -41,11 +41,11 @@ func command(parser dbterm.ConfigParser) *cobra.Command {
 			t := config[dbterm.CATEGORY].(string)
 			command, supported := supportedDB[t]
 			if !supported {
-				fmt.Printf("List not supported on selected database: %s \n", config[dbterm.DRIVER])
+				fmt.Printf("Disk not supported on selected database: %s \n", config[dbterm.DRIVER])
 				os.Exit(1)
 			}
 			if err := command.Disk(config); err != nil {
-				dbterm.Validator(config[dbterm.FLAG_STAT].(string), listAttributes)
+				dbterm.FlagHelper(config[dbterm.FLAG_STAT].(string), listAttributes)
 				fmt.Println(err)
 				os.Exit(1)
 			}

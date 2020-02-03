@@ -63,10 +63,19 @@ func DoPrint(c Config, res interface{}) error {
 	return nil
 }
 
-func Validator(flg string, list map[string]string) error {
+func FlagHelper(flg string, list map[string]string) error {
 	fmt.Printf("Error: flag with argument '%s' not found \n\nTry using:\n", flg)
 	for k, v := range list {
 		fmt.Printf("\t%s \t%s\n", k, v)
+	}
+	println()
+	return nil
+}
+
+func DriverHelper(command, driver string, list []string) error {
+	fmt.Printf("Error: %s not supported on selected database: %s \n\nTry using:\n", command, driver)
+	for _, v := range list {
+		fmt.Printf("\t%s\n", v)
 	}
 	println()
 	return nil
