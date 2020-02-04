@@ -5,14 +5,14 @@ import (
 
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
-	"github.com/isollaa/dbterm"
+	"github.com/isollaa/dbterm/config"
 )
 
-func MongoDial(config dbterm.Config) (*mgo.Session, error) {
+func MongoDial(c config.Config) (*mgo.Session, error) {
 	dsn := fmt.Sprintf("mongodb://%s:%d/%s",
-		config[dbterm.HOST],
-		config[dbterm.PORT],
-		config[dbterm.DBNAME],
+		c[config.HOST],
+		c[config.PORT],
+		c[config.DBNAME],
 	)
 
 	session, err := mgo.Dial(dsn)
@@ -25,22 +25,22 @@ func MongoDial(config dbterm.Config) (*mgo.Session, error) {
 	return session, nil
 }
 
-func GetMongoListSession(config dbterm.Config, session *mgo.Session) ([]string, error) {
-	switch config[dbterm.FLAG_STAT] {
-	case dbterm.FLAG_DB:
+func GetMongoListSession(c config.Config, session *mgo.Session) ([]string, error) {
+	switch c[config.FLAG_STAT] {
+	case config.FLAG_DB:
 		return session.DatabaseNames()
-	case dbterm.FLAG_COLL:
-		return session.DB(config[dbterm.DBNAME].(string)).CollectionNames()
+	case config.FLAG_COLL:
+		return session.DB(c[config.DBNAME].(string)).CollectionNames()
 	}
-	return nil, fmt.Errorf("no such command: '%s'", config[dbterm.FLAG_STAT])
+	return nil, fmt.Errorf("no such command: '%s'", c[config.FLAG_STAT])
 }
 
-func GetMongoDiskQuery(config dbterm.Config) (interface{}, error) {
-	switch config[dbterm.FLAG_STAT] {
-	case dbterm.FLAG_DB:
+func GetMongoDiskQuery(c config.Config) (interface{}, error) {
+	switch c[config.FLAG_STAT] {
+	case config.FLAG_DB:
 		return "dbstats", nil
-	case dbterm.FLAG_COLL:
-		return &bson.D{bson.DocElem{"collstats", config[dbterm.COLLECTION].(string)}}, nil
+	case config.FLAG_COLL:
+		return &bson.D{bson.DocElem{"collstats", c[config.COLLECTION].(string)}}, nil
 	}
-	return nil, fmt.Errorf("no such command: '%s'", config[dbterm.FLAG_STAT])
+	return nil, fmt.Errorf("no such command: '%s'", c[config.FLAG_STAT])
 }

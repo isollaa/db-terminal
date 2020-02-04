@@ -1,3 +1,6 @@
+// +build mysql
+// build
+
 package sql
 
 import (
@@ -22,16 +25,16 @@ func (m *mysql) GetQueryTable() string {
 	return "SHOW TABLES"
 }
 
-func (m *mysql) GetDiskSpace(config dbterm.Config) (map[string]string, error) {
+func (m *mysql) GetDiskSpace(config config.Config) (map[string]string, error) {
 	v := map[string]string{}
-	switch config[dbterm.FLAG_STAT] {
+	switch config[config.FLAG_STAT] {
 	case "db":
 		return v, errors.New("disk status not available")
 	case "coll":
-		v["title"] = fmt.Sprintf("Table - %s", config[dbterm.COLLECTION])
-		v["query"] = fmt.Sprintf("SELECT (data_length+index_length)/power(1024,1) FROM information_schema.tables WHERE table_schema='%s' and table_name='%s'", config[dbterm.DBNAME], config[dbterm.COLLECTION])
+		v["title"] = fmt.Sprintf("Table - %s", config[config.COLLECTION])
+		v["query"] = fmt.Sprintf("SELECT (data_length+index_length)/power(1024,1) FROM information_schema.tables WHERE table_schema='%s' and table_name='%s'", config[config.DBNAME], config[config.COLLECTION])
 	default:
-		return nil, fmt.Errorf("no such command: '%s'", config[dbterm.FLAG_STAT])
+		return nil, fmt.Errorf("no such command: '%s'", config[config.FLAG_STAT])
 	}
 	return v, nil
 }

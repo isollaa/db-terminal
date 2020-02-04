@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 	"github.com/spf13/cobra"
 )
 
@@ -29,43 +31,43 @@ func Exec() error {
 	rootCmd.PersistentFlags().BoolP("beauty", "b", false, "show pretty version of json")
 	rootCmd.PersistentFlags().BoolP("prompt", "p", false, "call password prompt")
 
-	for _, command := range listCommand {
+	for _, command := range registry.Command() {
 		rootCmd.AddCommand(command(setConfig))
 	}
 	return rootCmd.Execute()
 }
 
-func setConfig(cmd *cobra.Command) Config {
-	c := Config{
-		DRIVER:      "",
-		HOST:        "",
-		PORT:        0,
-		USERNAME:    "",
-		PASSWORD:    "",
-		DBNAME:      "",
-		COLLECTION:  "",
-		CATEGORY:    "",
-		FLAG_STAT:   "",
-		FLAG_TYPE:   "",
-		FLAG_BEAUTY: false,
-		FLAG_PROMPT: false,
+func setConfig(cmd *cobra.Command) config.Config {
+	c := config.Config{
+		config.DRIVER:      "",
+		config.HOST:        "",
+		config.PORT:        0,
+		config.USERNAME:    "",
+		config.PASSWORD:    "",
+		config.DBNAME:      "",
+		config.COLLECTION:  "",
+		config.CATEGORY:    "",
+		config.FLAG_STAT:   "",
+		config.FLAG_TYPE:   "",
+		config.FLAG_BEAUTY: false,
+		config.FLAG_PROMPT: false,
 	}
-	c.setConfig(cmd)
-	if err := RequirementCheck(c, DRIVER); err != nil {
+	setConfig(cmd)
+	if err := config.RequirementCheck(c, config.DRIVER); err != nil {
 		log.Fatalf("error: %s", err)
 	}
 	if err := setConfigByYaml(c); err != nil {
 		log.Println("unable to", err)
 	}
-	if c[FLAG_PROMPT].(bool) {
+	if c[config.FLAG_PROMPT].(bool) {
 		err := promptPassword(c)
 		if err != nil {
 			log.Fatalf("error: %s", err)
 		}
 	}
-	c[CATEGORY] = c[DRIVER]
-	if c[CATEGORY] == "postgres" || c[CATEGORY] == "mysql" {
-		c[CATEGORY] = "sql"
+	c[config.CATEGORY] = c[config.DRIVER]
+	if c[config.CATEGORY] == "postgres" || c[config.CATEGORY] == "mysql" {
+		c[config.CATEGORY] = "sql"
 	}
 	return c
 }

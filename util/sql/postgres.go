@@ -1,3 +1,6 @@
+// +build postgres
+// build
+
 package sql
 
 import (
@@ -21,21 +24,21 @@ func (m *postgres) GetQueryTable() string {
 	return "SELECT table_schema,table_name FROM information_schema.tables ORDER BY table_schema,table_name"
 }
 
-func (m *postgres) GetDiskSpace(config dbterm.Config) (map[string]string, error) {
+func (m *postgres) GetDiskSpace(config config.Config) (map[string]string, error) {
 	v := map[string]string{}
 	info := ""
 	attrib := ""
-	switch config[dbterm.FLAG_STAT] {
+	switch config[config.FLAG_STAT] {
 	case "db":
 		info = "pg_database_size"
-		attrib = config[dbterm.DBNAME].(string)
+		attrib = config[config.DBNAME].(string)
 		v["title"] = "DB - " + attrib
 	case "coll":
 		info = "pg_total_relation_size"
-		attrib = config[dbterm.COLLECTION].(string)
+		attrib = config[config.COLLECTION].(string)
 		v["title"] = fmt.Sprintf("Table - %s", attrib)
 	default:
-		return nil, fmt.Errorf("no such command: '%s'", config[dbterm.FLAG_STAT])
+		return nil, fmt.Errorf("no such command: '%s'", config[config.FLAG_STAT])
 	}
 	v["query"] = fmt.Sprintf("SELECT pg_size_pretty(%s('%s'))", info, attrib)
 	return v, nil

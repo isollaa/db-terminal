@@ -1,24 +1,25 @@
 package list
 
 import (
-	"github.com/isollaa/dbterm"
+	"github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 	"github.com/isollaa/dbterm/util"
 )
 
-type mongo struct {
-	Result interface{}
-}
-
-func (s *mongo) List(config dbterm.Config) error {
-	session, err := util.MongoDial(config)
+func Mongo(r *registry.Result, c config.Config) error {
+	session, err := util.MongoDial(c)
 	if err != nil {
 		return err
 	}
-	result, err := util.GetMongoListSession(config, session)
+	r.Value, err = util.GetMongoListSession(c, session)
 	if err != nil {
 		return err
 	}
-	s.Result = result
 
 	return nil
 }
+
+// func init() {
+// 	m := &Mongo{}
+// 	plugin.RegisterDriver("mongo", m.list)
+// }

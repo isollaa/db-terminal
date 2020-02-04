@@ -1,4 +1,4 @@
-package dbterm
+package config
 
 import (
 	"fmt"

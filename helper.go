@@ -4,55 +4,56 @@ import (
 	"fmt"
 
 	"github.com/isollaa/conn/helper"
+	"github.com/isollaa/dbterm/config"
 	"github.com/isollaa/dbterm/setup"
 	"golang.org/x/crypto/ssh/terminal"
 )
 
-func setConfigByYaml(c Config) error {
+func setConfigByYaml(c config.Config) error {
 	v, err := setup.GetYamlConfig()
 	if err != nil {
 		return err
 	}
-	if c[HOST] == "" {
-		c[HOST] = v.Driver[c[DRIVER].(string)].Host
+	if c[config.HOST] == "" {
+		c[config.HOST] = v.Driver[c[config.DRIVER].(string)].Host
 	}
-	if c[PORT] == 0 {
-		c[PORT] = v.Driver[c[DRIVER].(string)].Port
+	if c[config.PORT] == 0 {
+		c[config.PORT] = v.Driver[c[config.DRIVER].(string)].Port
 	}
-	if c[USERNAME] == "" {
-		c[USERNAME] = v.Driver[c[DRIVER].(string)].Username
+	if c[config.USERNAME] == "" {
+		c[config.USERNAME] = v.Driver[c[config.DRIVER].(string)].Username
 	}
-	if c[PASSWORD] == "" && !c[FLAG_PROMPT].(bool) {
-		c[PASSWORD] = v.Driver[c[DRIVER].(string)].Password
+	if c[config.PASSWORD] == "" && !c[config.FLAG_PROMPT].(bool) {
+		c[config.PASSWORD] = v.Driver[c[config.DRIVER].(string)].Password
 	}
-	if c[DBNAME] == "" {
-		c[DBNAME] = v.Driver[c[DRIVER].(string)].DBName
+	if c[config.DBNAME] == "" {
+		c[config.DBNAME] = v.Driver[c[config.DRIVER].(string)].DBName
 	}
-	if c[COLLECTION] == "" {
-		c[COLLECTION] = v.Driver[c[DRIVER].(string)].DBName
+	if c[config.COLLECTION] == "" {
+		c[config.COLLECTION] = v.Driver[c[config.DRIVER].(string)].DBName
 	}
 	if v.Beautify {
-		c[FLAG_BEAUTY] = v.Beautify
+		c[config.FLAG_BEAUTY] = v.Beautify
 	}
 	if v.Prompt {
-		c[FLAG_PROMPT] = v.Prompt
+		c[config.FLAG_PROMPT] = v.Prompt
 	}
 	return nil
 }
 
-func promptPassword(c Config) error {
+func promptPassword(c config.Config) error {
 	print("Input database password : ")
 	passDb, err := terminal.ReadPassword(0)
 	if err != nil {
 		return err
 	}
-	c[PASSWORD] = string(passDb)
+	c[config.PASSWORD] = string(passDb)
 	println()
 	return nil
 }
 
-func DoPrint(c Config, res interface{}) error {
-	if c[FLAG_BEAUTY].(bool) {
+func DoPrint(c config.Config, res interface{}) error {
+	if c[config.FLAG_BEAUTY].(bool) {
 		if err := helper.PrintPretty(res); err != nil {
 			return err
 		}

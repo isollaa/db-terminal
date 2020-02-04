@@ -1,5 +1,3 @@
-// +build disk
-
 package disk
 
 import (
@@ -8,54 +6,49 @@ import (
 	"os"
 
 	"github.com/isollaa/dbterm"
+	"github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 	"github.com/spf13/cobra"
 )
 
 var listAttributes = map[string]string{
-	dbterm.FLAG_DB:   "disk usage of selected database",
-	dbterm.FLAG_COLL: "disk usage of selected collection",
+	config.FLAG_DB:   "disk usage of selected database",
+	config.FLAG_COLL: "disk usage of selected collection",
 }
 
-var supportedDB = map[string]commander{}
-
-type commander interface {
-	Disk(dbterm.Config) error
-}
-
-func command(parser dbterm.ConfigParser) *cobra.Command {
+func command(parser registry.ConfigParser) *cobra.Command {
 	return &cobra.Command{
 		Use:   "disk",
 		Short: "Database disk usage status",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := parser(cmd)
-			if err := dbterm.RequirementCheck(config, dbterm.FLAG_STAT); err != nil {
+			c := parser(cmd)
+			if err := config.RequirementCheck(c, config.FLAG_STAT); err != nil {
 				log.Fatalf("error: %s", err)
 				return
 			}
-			if config[dbterm.FLAG_STAT] == dbterm.FLAG_COLL {
-				if err := dbterm.RequirementCheck(config, dbterm.DBNAME, dbterm.COLLECTION); err != nil {
+			if c[config.FLAG_STAT] == config.FLAG_COLL {
+				if err := config.RequirementCheck(c, config.DBNAME, config.COLLECTION); err != nil {
 					log.Fatalf("error: %s", err)
 					os.Exit(1)
 				}
 			}
-			t := config[dbterm.CATEGORY].(string)
-			command, supported := supportedDB[t]
+			t := c[config.CATEGORY].(string)
+			command, supported := registry.Driver(t, cmd.Use)
 			if !supported {
-				fmt.Printf("Disk not supported on selected database: %s \n", config[dbterm.DRIVER])
+				fmt.Printf("Error: Disk not supported on selected database: %s \n", c[config.DRIVER])
 				os.Exit(1)
 			}
-			if err := command.Disk(config); err != nil {
-				dbterm.FlagHelper(config[dbterm.FLAG_STAT].(string), listAttributes)
+			r := registry.Result{}
+			if err := command(&r, c); err != nil {
+				dbterm.FlagHelper(c[config.FLAG_STAT].(string), listAttributes)
 				fmt.Println(err)
 				os.Exit(1)
 			}
-			dbterm.DoPrint(config, command)
+			dbterm.DoPrint(c, r.Value)
 		},
 	}
 }
 
 func init() {
-	dbterm.RegisterCommand(command)
-	supportedDB["mongo"] = &mongo{}
-	supportedDB["sql"] = &sql{}
+	registry.RegisterCommand(command)
 }

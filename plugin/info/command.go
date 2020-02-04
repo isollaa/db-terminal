@@ -1,5 +1,3 @@
-// +build info
-
 package info
 
 import (
@@ -8,6 +6,8 @@ import (
 	"os"
 
 	"github.com/isollaa/dbterm"
+	"github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 	"github.com/spf13/cobra"
 )
 
@@ -19,42 +19,37 @@ const (
 var listInfo = map[string]string{
 	SERVER:      "server info of selected driver",
 	BUILD:       "build info of selected driver",
-	dbterm.HOST: "host info of selected driver",
+	config.HOST: "host info of selected driver",
 }
 
-var supportedDB = map[string]commander{}
-
-type commander interface {
-	Info(dbterm.Config) error
-}
-
-func command(parser dbterm.ConfigParser) *cobra.Command {
+func command(parser registry.ConfigParser) *cobra.Command {
 	return &cobra.Command{
 		Use:   "info",
 		Short: "Database information",
 		Run: func(cmd *cobra.Command, args []string) {
-			config := parser(cmd)
-			if err := dbterm.RequirementCheck(config, dbterm.FLAG_STAT); err != nil {
+			c := parser(cmd)
+			if err := config.RequirementCheck(c, config.FLAG_STAT); err != nil {
 				log.Fatalf("error: %s", err)
 				return
 			}
-			t := config[dbterm.CATEGORY].(string)
-			command, supported := supportedDB[t]
+			t := c[config.CATEGORY].(string)
+			command, supported := registry.Driver(t, cmd.Use)
 			if !supported {
-				fmt.Printf("Info not supported on selected database: %s \n", config[dbterm.DRIVER])
+				fmt.Printf("Error: Info not supported on selected database: %s \n", c[config.DRIVER])
 				os.Exit(1)
 			}
-			if err := command.Info(config); err != nil {
-				dbterm.FlagHelper(config[dbterm.FLAG_STAT].(string), listInfo)
+			r := registry.Result{}
+			if err := command(&r, c); err != nil {
+				dbterm.FlagHelper(c[config.FLAG_STAT].(string), listInfo)
 				fmt.Println(err)
 				os.Exit(1)
 			}
-			dbterm.DoPrint(config, command)
+			dbterm.DoPrint(c, r.Value)
 		},
 	}
 }
 
+
 func init() {
-	dbterm.RegisterCommand(command)
-	supportedDB["mongo"] = &mongo{}
+	registry.RegisterCommand(command)
 }

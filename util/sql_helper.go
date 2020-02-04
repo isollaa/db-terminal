@@ -3,8 +3,9 @@ package util
 import (
 	"database/sql"
 	"fmt"
+	"os"
 
-	"github.com/isollaa/dbterm"
+	"github.com/isollaa/dbterm/config"
 )
 
 var ListSQL = map[string]SQL{}
@@ -13,17 +14,22 @@ type SQL interface {
 	DSNFormat() string
 	GetQueryDB() string
 	GetQueryTable() string
-	GetDiskSpace(config dbterm.Config) (map[string]string, error)
+	GetDiskSpace(c config.Config) (map[string]string, error)
 }
 
-func SQLDial(config dbterm.Config) (*sql.DB, error) {
-	t := config[dbterm.DRIVER].(string)
-	dsn := fmt.Sprintf(ListSQL[t].DSNFormat(),
-		config[dbterm.USERNAME],
-		config[dbterm.PASSWORD],
-		config[dbterm.HOST],
-		config[dbterm.PORT],
-		config[dbterm.DBNAME],
+func SQLDial(c config.Config) (*sql.DB, error) {
+	t := c[config.DRIVER].(string)
+	l, supported := ListSQL[t]
+	if !supported {
+		fmt.Printf("Error: Command not supported on selected database: %s \n", c[config.DRIVER])
+		os.Exit(1)
+	}
+	dsn := fmt.Sprintf(l.DSNFormat(),
+		c[config.USERNAME],
+		c[config.PASSWORD],
+		c[config.HOST],
+		c[config.PORT],
+		c[config.DBNAME],
 	)
 
 	db, err := sql.Open(t, dsn)
@@ -36,18 +42,18 @@ func SQLDial(config dbterm.Config) (*sql.DB, error) {
 	return db, nil
 }
 
-func GetSQLListSession(config dbterm.Config) string {
-	t := config[dbterm.DRIVER].(string)
-	switch config[dbterm.FLAG_STAT] {
-	case dbterm.FLAG_DB:
+func GetSQLListSession(c config.Config) string {
+	t := c[config.DRIVER].(string)
+	switch c[config.FLAG_STAT] {
+	case config.FLAG_DB:
 		return ListSQL[t].GetQueryDB()
-	case dbterm.FLAG_COLL:
+	case config.FLAG_COLL:
 		return ListSQL[t].GetQueryTable()
 	}
 	return ""
 }
 
-func GetSQLDiskQuery(config dbterm.Config) (map[string]string, error) {
-	t := config[dbterm.DRIVER].(string)
-	return ListSQL[t].GetDiskSpace(config)
+func GetSQLDiskQuery(c config.Config) (map[string]string, error) {
+	t := c[config.DRIVER].(string)
+	return ListSQL[t].GetDiskSpace(c)
 }

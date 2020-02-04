@@ -1,29 +1,28 @@
 package disk
 
 import (
-	"github.com/globalsign/mgo/bson"
-	"github.com/isollaa/dbterm"
+	"github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 	"github.com/isollaa/dbterm/util"
 )
 
-type mongo struct {
-	Result interface{}
-}
-
-func (s *mongo) Disk(config dbterm.Config) error {
-	session, err := util.MongoDial(config)
+func Mongo(r *registry.Result, c config.Config) error {
+	session, err := util.MongoDial(c)
 	if err != nil {
 		return err
 	}
-	query, err := util.GetMongoDiskQuery(config)
+	query, err := util.GetMongoDiskQuery(c)
 	if err != nil {
 		return err
 	}
-	result := bson.M{}
-	err = session.DB(config[dbterm.DBNAME].(string)).Run(query, &result)
+	err = session.DB(c[config.DBNAME].(string)).Run(query, &r.Value)
 	if err != nil {
 		return err
 	}
-	s.Result = result
 	return nil
 }
+
+// func init() {
+// 	m := &Mongo{}
+// 	plugin.RegisterDriver("mongo", m.disk)
+// }

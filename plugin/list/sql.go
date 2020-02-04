@@ -3,20 +3,17 @@ package list
 import (
 	"fmt"
 
-	"github.com/isollaa/dbterm"
+	"github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/plugin"
 	"github.com/isollaa/dbterm/util"
 )
 
-type sql struct {
-	Result interface{}
-}
-
-func (s *sql) List(config dbterm.Config) error {
-	session, err := util.SQLDial(config)
+func SQL(r *registry.Result, c config.Config) error {
+	session, err := util.SQLDial(c)
 	if err != nil {
 		return err
 	}
-	query := util.GetSQLListSession(config)
+	query := util.GetSQLListSession(c)
 	if query == "" {
 		return fmt.Errorf("Error: unable to get query")
 	}
@@ -31,6 +28,11 @@ func (s *sql) List(config dbterm.Config) error {
 		rows.Scan(&res)
 		result = append(result, res)
 	}
-	s.Result = result
+	r.Value = result
 	return nil
 }
+
+// func init() {
+// 	m := &SQL{}
+// 	plugin.RegisterDriver("sql", m.list)
+// }

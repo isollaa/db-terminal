@@ -4,15 +4,12 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/isollaa/dbterm"
+	"github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/registry"
 	"github.com/isollaa/dbterm/util"
 )
 
-type sql struct {
-	Result interface{}
-}
-
-func (s *sql) Disk(config dbterm.Config) error {
+func SQL(r *registry.Result, config config.Config) error {
 	session, err := util.SQLDial(config)
 	if err != nil {
 		return err
@@ -33,9 +30,14 @@ func (s *sql) Disk(config dbterm.Config) error {
 	if table == "" {
 		return errors.New("data not found")
 	}
-	if config[dbterm.DRIVER] == "mysql" {
+	if config[config.DRIVER] == "mysql" {
 		table = table + " kB"
 	}
-	s.Result = fmt.Sprintf("%s, Disk Size: %s", v["title"], table)
+	r.Value = fmt.Sprintf("%s, Disk Size: %s", v["title"], table)
 	return nil
 }
+
+// func init() {
+// 	m := &SQL{}
+// 	registry.RegisterDriver("sql", m.disk)
+// }
