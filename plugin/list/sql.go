@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/isollaa/dbterm/config"
-	"github.com/isollaa/dbterm/plugin"
+	"github.com/isollaa/dbterm/registry"
 	"github.com/isollaa/dbterm/util"
 )
 
-func SQL(r *registry.Result, c config.Config) error {
+func Sql(r *registry.Result, c config.Config) error {
 	session, err := util.SQLDial(c)
 	if err != nil {
 		return err

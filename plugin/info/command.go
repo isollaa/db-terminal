@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/isollaa/dbterm"
 	"github.com/isollaa/dbterm/config"
@@ -32,7 +33,7 @@ func command(parser registry.ConfigParser) *cobra.Command {
 				log.Fatalf("error: %s", err)
 				return
 			}
-			t := c[config.CATEGORY].(string)
+			t := strings.Title(strings.ToLower(c[config.CATEGORY].(string)))
 			command, supported := registry.Driver(t, cmd.Use)
 			if !supported {
 				fmt.Printf("Error: Info not supported on selected database: %s \n", c[config.DRIVER])
@@ -48,7 +49,6 @@ func command(parser registry.ConfigParser) *cobra.Command {
 		},
 	}
 }
-
 
 func init() {
 	registry.RegisterCommand(command)

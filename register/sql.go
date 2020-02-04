@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	registry.RegisterDriver(disk.SQL)
-	registry.RegisterDriver(list.SQL)
-	registry.RegisterDriver(ping.SQL)
+	registry.RegisterDriver(disk.Sql)
+	registry.RegisterDriver(list.Sql)
+	registry.RegisterDriver(ping.Sql)
 }

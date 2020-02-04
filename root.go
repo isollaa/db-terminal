@@ -52,7 +52,7 @@ func setConfig(cmd *cobra.Command) config.Config {
 		config.FLAG_BEAUTY: false,
 		config.FLAG_PROMPT: false,
 	}
-	setConfig(cmd)
+	c.SetConfig(cmd)
 	if err := config.RequirementCheck(c, config.DRIVER); err != nil {
 		log.Fatalf("error: %s", err)
 	}

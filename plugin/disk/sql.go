@@ -9,12 +9,12 @@ import (
 	"github.com/isollaa/dbterm/util"
 )
 
-func SQL(r *registry.Result, config config.Config) error {
-	session, err := util.SQLDial(config)
+func Sql(r *registry.Result, c config.Config) error {
+	session, err := util.SQLDial(c)
 	if err != nil {
 		return err
 	}
-	v, err := util.GetSQLDiskQuery(config)
+	v, err := util.GetSQLDiskQuery(c)
 	if err != nil {
 		return err
 	}
@@ -30,7 +30,7 @@ func SQL(r *registry.Result, config config.Config) error {
 	if table == "" {
 		return errors.New("data not found")
 	}
-	if config[config.DRIVER] == "mysql" {
+	if c[config.DRIVER] == "mysql" {
 		table = table + " kB"
 	}
 	r.Value = fmt.Sprintf("%s, Disk Size: %s", v["title"], table)

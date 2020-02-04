@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/isollaa/dbterm/config"
 )
@@ -18,7 +19,8 @@ type SQL interface {
 }
 
 func SQLDial(c config.Config) (*sql.DB, error) {
-	t := c[config.DRIVER].(string)
+	// t := c[config.DRIVER].(string)
+	t := strings.ToLower(c[config.DRIVER].(string))
 	l, supported := ListSQL[t]
 	if !supported {
 		fmt.Printf("Error: Command not supported on selected database: %s \n", c[config.DRIVER])

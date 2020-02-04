@@ -3,6 +3,7 @@ package ping
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/isollaa/dbterm"
 	"github.com/isollaa/dbterm/config"
@@ -16,7 +17,7 @@ func command(parser registry.ConfigParser) *cobra.Command {
 		Short: "Database availability check",
 		Run: func(cmd *cobra.Command, args []string) {
 			c := parser(cmd)
-			t := c[config.CATEGORY].(string)
+			t := strings.Title(strings.ToLower(c[config.CATEGORY].(string)))
 			command, supported := registry.Driver(t, cmd.Use)
 			if !supported {
 				fmt.Printf("Error: Ping not supported on selected database: %s \n", c[config.DRIVER])

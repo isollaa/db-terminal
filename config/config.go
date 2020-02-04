@@ -75,7 +75,7 @@ func RequirementCheck(c Config, arg ...string) error {
 	return nil
 }
 
-func (c Config) setConfig(cmd *cobra.Command) {
+func (c Config) SetConfig(cmd *cobra.Command) {
 	for key := range c {
 		if key == PASSWORD || key == CATEGORY {
 			continue
