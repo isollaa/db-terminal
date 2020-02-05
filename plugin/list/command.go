@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	"github.com/isollaa/dbterm"
 	"github.com/isollaa/dbterm/config"
@@ -28,12 +27,12 @@ func command(parser registry.ConfigParser) *cobra.Command {
 				return
 			}
 			if c[config.FLAG_STAT] == config.FLAG_COLL {
-				if err := config.RequirementCheck(c, config.DBNAME, config.COLLECTION); err != nil {
+				if err := config.RequirementCheck(c, config.DBNAME); err != nil {
 					log.Fatalf("error: %s", err)
 					os.Exit(1)
 				}
 			}
-			t := strings.Title(strings.ToLower(c[config.CATEGORY].(string)))
+			t := c[config.CATEGORY].(string)
 			command, supported := registry.Driver(t, cmd.Use)
 			if !supported {
 				fmt.Printf("Error: List not supported on selected database: %s \n", c[config.DRIVER])

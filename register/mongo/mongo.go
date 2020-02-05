@@ -1,4 +1,4 @@
-package register
+package mongo
 
 import (
 	"github.com/isollaa/dbterm/plugin/disk"

@@ -2,6 +2,7 @@ package registry
 
 import (
 	"log"
+	"strings"
 
 	"github.com/isollaa/conn/helper"
 	"github.com/isollaa/dbterm/config"
@@ -17,7 +18,7 @@ type commander func(*Result, config.Config) error
 
 func RegisterDriver(list commander) {
 	name := helper.GetName(helper.PACKAGE, list)
-	driver := helper.GetName(helper.METHOD, list)
+	driver := strings.ToLower(helper.GetName(helper.METHOD, list))
 	if supportedDB[driver][name] != nil {
 		log.Printf("Feature %s for driver %s already registered !", name, driver)
 		return

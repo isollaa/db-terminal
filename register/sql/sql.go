@@ -1,4 +1,4 @@
-package register
+package sql
 
 import (
 	"github.com/isollaa/dbterm/plugin/disk"
