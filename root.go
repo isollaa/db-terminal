@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/helper"
 	"github.com/isollaa/dbterm/registry"
 	"github.com/spf13/cobra"
 )
@@ -27,7 +28,6 @@ func Exec() error {
 	rootCmd.PersistentFlags().String("dbname", "", "connection database name")
 	rootCmd.PersistentFlags().StringP("collection", "c", "", "connection database collection name")
 	rootCmd.PersistentFlags().StringP("stat", "s", "", "connection information")
-	rootCmd.PersistentFlags().StringP("type", "t", "", "connection information type")
 	rootCmd.PersistentFlags().BoolP("beauty", "b", false, "show pretty version of json")
 	rootCmd.PersistentFlags().BoolP("prompt", "p", false, "call password prompt")
 
@@ -48,7 +48,6 @@ func setConfig(cmd *cobra.Command) config.Config {
 		config.COLLECTION:  "",
 		config.CATEGORY:    "",
 		config.FLAG_STAT:   "",
-		config.FLAG_TYPE:   "",
 		config.FLAG_BEAUTY: false,
 		config.FLAG_PROMPT: false,
 	}
@@ -56,11 +55,12 @@ func setConfig(cmd *cobra.Command) config.Config {
 	if err := config.RequirementCheck(c, config.DRIVER); err != nil {
 		log.Fatalf("error: %s", err)
 	}
-	if err := setConfigByYaml(c); err != nil {
+	if err := helper.SetConfigByYaml(c); err != nil {
 		log.Println("unable to", err)
 	}
 	if c[config.FLAG_PROMPT].(bool) {
-		err := promptPassword(c)
+		print("Input database password : ")
+		err := helper.PromptPassword(c)
 		if err != nil {
 			log.Fatalf("error: %s", err)
 		}

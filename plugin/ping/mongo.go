@@ -15,12 +15,13 @@ func Mongo(r *registry.Result, c config.Config) error {
 		r.Value = fmt.Sprintf("Ping done in %d ms", time.Now().Sub(start).Microseconds())
 	}()
 
-	db, err := util.MongoDial(c)
+	session, err := util.MongoDial(c)
 	if err != nil {
 		return err
 	}
+	defer session.Close()
 
-	return db.Ping()
+	return session.Ping()
 }
 
 // func init() {

@@ -20,7 +20,6 @@ const (
 	FLAG_DB     = "db"
 	FLAG_COLL   = "coll"
 	FLAG_STAT   = "stat"
-	FLAG_TYPE   = "type"
 	FLAG_BEAUTY = "beauty"
 	FLAG_PROMPT = "prompt"
 )
@@ -45,8 +44,6 @@ func requirementCase(v string) string {
 		return "-c"
 	case FLAG_STAT:
 		return "-s"
-	case FLAG_TYPE:
-		return "-t"
 	case FLAG_BEAUTY:
 		return "-b"
 	case FLAG_PROMPT:

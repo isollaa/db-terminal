@@ -11,6 +11,7 @@ func Mongo(r *registry.Result, c config.Config) error {
 	if err != nil {
 		return err
 	}
+	defer session.Close()
 	r.Value, err = util.GetMongoListSession(c, session)
 	if err != nil {
 		return err

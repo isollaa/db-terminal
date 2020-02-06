@@ -14,6 +14,7 @@ func Mongo(r *registry.Result, c config.Config) error {
 	if err != nil {
 		return err
 	}
+	defer session.Close()
 	query := &bson.D{}
 	info := fmt.Sprintf("%sInfo", c[config.FLAG_STAT])
 	if info == "serverInfo" {

@@ -9,11 +9,12 @@ import (
 	"github.com/isollaa/dbterm/util"
 )
 
-func Sql(r *registry.Result, c config.Config) error {
+func SQL(r *registry.Result, c config.Config) error {
 	session, err := util.SQLDial(c)
 	if err != nil {
 		return err
 	}
+	defer session.Close()
 	v, err := util.GetSQLDiskQuery(c)
 	if err != nil {
 		return err

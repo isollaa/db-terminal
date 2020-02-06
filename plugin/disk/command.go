@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
-	"github.com/isollaa/dbterm"
+	h "github.com/isollaa/conn/helper"
 	"github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/helper"
 	"github.com/isollaa/dbterm/registry"
 	"github.com/spf13/cobra"
 )
@@ -23,28 +25,30 @@ func command(parser registry.ConfigParser) *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			c := parser(cmd)
 			if err := config.RequirementCheck(c, config.FLAG_STAT); err != nil {
-				log.Fatalf("error: %s", err)
+				log.Fatalf("Error: %s", err)
 				return
 			}
 			if c[config.FLAG_STAT] == config.FLAG_COLL {
 				if err := config.RequirementCheck(c, config.DBNAME, config.COLLECTION); err != nil {
-					log.Fatalf("error: %s", err)
+					log.Fatalf("Error: %s", err)
 					os.Exit(1)
 				}
 			}
 			t := c[config.CATEGORY].(string)
-			command, supported := registry.Driver(t, cmd.Use)
+			command, supported := registry.Driver(t, h.GetName(h.PACKAGE, command))
 			if !supported {
 				fmt.Printf("Error: Disk not supported on selected database: %s \n", c[config.DRIVER])
 				os.Exit(1)
 			}
 			r := registry.Result{}
 			if err := command(&r, c); err != nil {
-				dbterm.FlagHelper(c[config.FLAG_STAT].(string), listAttributes)
-				fmt.Println(err)
+				if strings.Contains(fmt.Sprintf("%s", err), "no such command:") {
+					helper.HintFlag(c[config.FLAG_STAT].(string), listAttributes)
+				}
+				fmt.Println("Error:", err)
 				os.Exit(1)
 			}
-			dbterm.DoPrint(c, r.Value)
+			helper.DoPrint(c, r.Value)
 		},
 	}
 }

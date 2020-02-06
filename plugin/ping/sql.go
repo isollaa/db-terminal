@@ -11,18 +11,19 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func Sql(r *registry.Result, c config.Config) error {
+func SQL(r *registry.Result, c config.Config) error {
 	start := time.Now()
 	defer func() {
 		r.Value = fmt.Sprintf("Ping done in %d ms", time.Now().Sub(start).Microseconds())
 	}()
 
-	db, err := util.SQLDial(c)
+	session, err := util.SQLDial(c)
 	if err != nil {
 		return err
 	}
+	defer session.Close()
 
-	return db.Ping()
+	return session.Ping()
 }
 
 // func init() {

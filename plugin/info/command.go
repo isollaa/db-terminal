@@ -5,8 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/isollaa/dbterm"
+	h "github.com/isollaa/conn/helper"
 	"github.com/isollaa/dbterm/config"
+	"github.com/isollaa/dbterm/helper"
 	"github.com/isollaa/dbterm/registry"
 	"github.com/spf13/cobra"
 )
@@ -33,18 +34,18 @@ func command(parser registry.ConfigParser) *cobra.Command {
 				return
 			}
 			t := c[config.CATEGORY].(string)
-			command, supported := registry.Driver(t, cmd.Use)
+			command, supported := registry.Driver(t, h.GetName(h.PACKAGE, command))
 			if !supported {
 				fmt.Printf("Error: Info not supported on selected database: %s \n", c[config.DRIVER])
 				os.Exit(1)
 			}
 			r := registry.Result{}
 			if err := command(&r, c); err != nil {
-				dbterm.FlagHelper(c[config.FLAG_STAT].(string), listInfo)
+				helper.HintFlag(c[config.FLAG_STAT].(string), listInfo)
 				fmt.Println(err)
 				os.Exit(1)
 			}
-			dbterm.DoPrint(c, r.Value)
+			helper.DoPrint(c, r.Value)
 		},
 	}
 }
