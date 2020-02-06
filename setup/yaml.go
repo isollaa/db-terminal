@@ -1,8 +1,6 @@
 package setup
 
 import (
-	"io/ioutil"
-
 	"github.com/ghodss/yaml"
 )
 
@@ -19,14 +17,9 @@ type Yaml struct {
 	Prompt   bool `json:"prompt"`
 }
 
-func GetYamlConfig() (*Yaml, error) {
+func GetYamlConfig(raw []byte) (*Yaml, error) {
 	var y *Yaml
-	v, err := ioutil.ReadFile("../setup/config.yaml")
-	if err != nil {
-		return y, err
-	}
-
-	err = yaml.Unmarshal(v, &y)
+	err := yaml.Unmarshal(raw, &y)
 	if err != nil {
 		return y, err
 	}

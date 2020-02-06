@@ -1,7 +1,8 @@
-package dbterm
+package helper
 
 import (
 	"fmt"
+	"io/ioutil"
 
 	"github.com/isollaa/conn/helper"
 	"github.com/isollaa/dbterm/config"
@@ -9,8 +10,12 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 )
 
-func setConfigByYaml(c config.Config) error {
-	v, err := setup.GetYamlConfig()
+func SetConfigByYaml(c config.Config) error {
+	raw, err := ioutil.ReadFile("../setup/config.yaml")
+	if err != nil {
+		return err
+	}
+	v, err := setup.GetYamlConfig(raw)
 	if err != nil {
 		return err
 	}
@@ -30,7 +35,7 @@ func setConfigByYaml(c config.Config) error {
 		c[config.DBNAME] = v.Driver[c[config.DRIVER].(string)].DBName
 	}
 	if c[config.COLLECTION] == "" {
-		c[config.COLLECTION] = v.Driver[c[config.DRIVER].(string)].DBName
+		c[config.COLLECTION] = v.Driver[c[config.DRIVER].(string)].Collection
 	}
 	if v.Beautify {
 		c[config.FLAG_BEAUTY] = v.Beautify
@@ -41,8 +46,7 @@ func setConfigByYaml(c config.Config) error {
 	return nil
 }
 
-func promptPassword(c config.Config) error {
-	print("Input database password : ")
+func PromptPassword(c config.Config) error {
 	passDb, err := terminal.ReadPassword(0)
 	if err != nil {
 		return err
@@ -64,7 +68,7 @@ func DoPrint(c config.Config, res interface{}) error {
 	return nil
 }
 
-func FlagHelper(flg string, list map[string]string) error {
+func HintFlag(flg string, list map[string]string) error {
 	fmt.Printf("Error: flag with argument '%s' not found \n\nTry using:\n", flg)
 	for k, v := range list {
 		fmt.Printf("\t%s \t%s\n", k, v)
@@ -73,7 +77,7 @@ func FlagHelper(flg string, list map[string]string) error {
 	return nil
 }
 
-func DriverHelper(command, driver string, list []string) error {
+func HintDriver(command, driver string, list []string) error {
 	fmt.Printf("Error: %s not supported on selected database: %s \n\nTry using:\n", command, driver)
 	for _, v := range list {
 		fmt.Printf("\t%s\n", v)
