@@ -1,4 +1,4 @@
-// +build release
+// +build !mongo,!sql,!mysql,!postgres
 
 package main
 
