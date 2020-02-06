@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"os"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/isollaa/dbterm/config"
+	_ "github.com/lib/pq"
 )
 
 var ListSQL = map[string]SQL{}

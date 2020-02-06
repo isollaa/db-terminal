@@ -1,6 +1,6 @@
 // +build sql postgres
 
-package cmd
+package main
 
 import (
 	_ "github.com/isollaa/dbterm/register/sql"
